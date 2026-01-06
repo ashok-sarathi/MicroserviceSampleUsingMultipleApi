@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Users.Api.Data;
+using Users.Api.Helpers.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<UserDbContext>(options => options.UseInMemoryDatabase("InMemory"));
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {

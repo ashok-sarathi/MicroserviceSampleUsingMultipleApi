@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Notifications.Api.Data;
+using Notifications.Api.Helpers.Filters;
 using Notifications.Api.Models;
 
 namespace Notifications.Api.Controllers
 {
+    [ApiKeyAuthorizationFilter]
     [Route("api/[controller]")]
     [ApiController]
     public class NotificationsController(NotificationDbContext context) : ControllerBase

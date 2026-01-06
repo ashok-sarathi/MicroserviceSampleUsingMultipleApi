@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Notifications.Api.Data;
+using Notifications.Api.Helpers.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<NotificationDbContext>(options => options.UseInMemoryDatabase("InMemory"));
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {

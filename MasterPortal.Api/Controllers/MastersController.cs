@@ -21,7 +21,7 @@ namespace MasterPortal.Api.Controllers
             try
             {
                 var dummyResponse = await httpClient.GetAsync("https://dummyjson.com/products");
-                var resultDummy = await dummyResponse.Content.ReadFromJsonAsync<ProductsDto>();
+                var resultDummy = await dummyResponse.Content.ReadFromJsonAsync<ProductsDto>() ?? new([]);
 
                 try
                 {
@@ -62,6 +62,10 @@ namespace MasterPortal.Api.Controllers
             try
             {
                 var response = await usersHttpClient.SendAsync(HttpMethod.Get, "api/users");
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new FailedDependencyException(await response.Content.ReadAsStringAsync());
+                }
                 var users = await response.Content.ReadFromJsonAsync<List<UserDto>>();
                 return Ok(users);
             }
@@ -79,8 +83,12 @@ namespace MasterPortal.Api.Controllers
             try
             {
                 var response = await notificationsHttpClient.SendAsync(httpMethod: HttpMethod.Get, route: "api/notifications");
-                var users = await response.Content.ReadFromJsonAsync<List<NotificationDto>>();
-                return Ok(users);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new FailedDependencyException(await response.Content.ReadAsStringAsync());
+                }
+                var notifications = await response.Content.ReadFromJsonAsync<List<NotificationDto>>();
+                return Ok(notifications);
             }
             catch (Exception ex)
             {

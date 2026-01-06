@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Users.Api.Data;
+using Users.Api.Helpers.Filters;
 using Users.Api.Models;
 
 namespace Users.Api.Controllers
 {
+    [ApiKeyAuthorizationFilter]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController(UserDbContext context) : ControllerBase

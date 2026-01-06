@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Notifications.Api.Models;
 
 namespace Notifications.Api.Data
 {
     public class NotificationDbContext(DbContextOptions<NotificationDbContext> options) : DbContext(options)
     {
-        public DbSet<Models.Notification> Notifications { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Models.Notification>(entity =>
+            modelBuilder.Entity<Notification>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(p => p.Title).IsRequired();
