@@ -1,4 +1,4 @@
-﻿namespace MasterPortal.Api.HttpClients.Base
+﻿namespace MasterPortal.Api.Helpers.HttpClients.Base
 {
     public abstract class DefaultHttpClient(HttpClient httpClient)
     {

@@ -1,6 +1,6 @@
-﻿using MasterPortal.Api.HttpClients.Base;
+﻿using MasterPortal.Api.Helpers.HttpClients.Base;
 
-namespace MasterPortal.Api.HttpClients
+namespace MasterPortal.Api.Helpers.HttpClients
 {
     public class UsersHttpClient(HttpClient httpClient) : DefaultHttpClient(httpClient)
     {

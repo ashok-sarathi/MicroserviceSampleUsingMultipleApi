@@ -1,4 +1,5 @@
 using MasterPortal.Api.Helpers.Extensions;
+using MasterPortal.Api.Helpers.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddHttpClients();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

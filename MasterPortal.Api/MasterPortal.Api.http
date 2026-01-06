@@ -1,6 +1,16 @@
-@MasterPortal.Api_HostAddress = http://localhost:5288
+@MasterPortal.Api_HostAddress = http://localhost:5201
 
-GET {{MasterPortal.Api_HostAddress}}/weatherforecast/
+GET {{MasterPortal.Api_HostAddress}}/api/masters/get
+Accept: application/json
+
+###
+
+GET {{MasterPortal.Api_HostAddress}}/api/masters/users
+Accept: application/json
+
+###
+
+GET {{MasterPortal.Api_HostAddress}}/api/masters/notifications
 Accept: application/json
 
 ###

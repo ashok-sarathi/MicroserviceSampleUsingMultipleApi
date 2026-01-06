@@ -1,4 +1,4 @@
-﻿using MasterPortal.Api.HttpClients;
+﻿using MasterPortal.Api.Helpers.HttpClients;
 
 namespace MasterPortal.Api.Helpers.Extensions
 {
