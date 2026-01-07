@@ -23,6 +23,13 @@ namespace MasterPortal.Api.Helpers.Extensions
                 op.BaseAddress = new Uri(config.BaseUrl);
                 op.DefaultRequestHeaders.Add("x-api-key", config.ApiKey);
             });
+
+            services.AddHttpClient<DummyJsonClient>((sp, op) =>
+            {
+                var config = sp.GetRequiredService<IOptionsMonitor<ServiceSettingModel>>().Get("DummyJsonService");
+
+                op.BaseAddress = new Uri(config.BaseUrl);
+            });
         }
     }
 }

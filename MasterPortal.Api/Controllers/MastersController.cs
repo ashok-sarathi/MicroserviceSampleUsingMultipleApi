@@ -16,43 +16,49 @@ namespace MasterPortal.Api.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<IActionResult> GetData([FromServices] HttpClient httpClient)
+        public async Task<IActionResult> GetData([FromServices] DummyJsonClient httpClient)
         {
             try
             {
-                var dummyResponse = await httpClient.GetAsync("https://dummyjson.com/products");
-                var resultDummy = await dummyResponse.Content.ReadFromJsonAsync<ProductsDto>() ?? new([]);
+                using var dummyResponse = await httpClient.SendAsync(HttpMethod.Get, "products");
+                dummyResponse.EnsureSuccessStatusCode();
 
-                try
+                var resultDummy =
+                    await dummyResponse.Content.ReadFromJsonAsync<ProductsDto>()
+                    ?? new ProductsDto([]);
+
+                var urls = resultDummy.Products
+                    .Select(p => $"products/{p.Id}")
+                    .ToList();
+
+                urls.Add("products/999999"); // Non-existing product to simulate failure
+
+                var tasks = urls.Select(async url =>
                 {
-                    IList<string> urls = [];
-                    foreach (var item in resultDummy.Products)
+                    using var response = await httpClient.SendAsync(HttpMethod.Get, url);
+
+                    return new
                     {
-                        urls.Add(($"https://dummyjson.com/products/{item.Id}"));
-                    }
+                        response.StatusCode,
+                        response.RequestMessage?.RequestUri,
+                        IsSuccess = response.IsSuccessStatusCode
+                    };
+                });
 
-                    var tasks = urls.Select(x => httpClient.GetAsync(x));
+                var results = await Task.WhenAll(tasks);
 
-                    await Task.WhenAll(tasks);
-
-                    return Ok();
-                }
-                catch (Exception ex)
+                if (results.Any(r => !r.IsSuccess))
                 {
-                    throw new FailedDependencyException(
-                            $"Exception from GET dummyjson.com/products/itemId:int, {ex.Message}"
-                        );
+                    return StatusCode(StatusCodes.Status207MultiStatus, results);
                 }
-            }
-            catch (FailedDependencyException)
-            {
-                throw;
+
+                return Ok(results);
             }
             catch (Exception ex)
             {
                 throw new FailedDependencyException(
-                        $"Exception from GET dummyjson.com/products, {ex.Message}"
-                    );
+                    $"Exception from dummyjson.com/products flow, {ex.Message}"
+                );
             }
         }
 

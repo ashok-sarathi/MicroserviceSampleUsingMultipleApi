@@ -11,6 +11,9 @@ namespace MasterPortal.Api.Helpers.Extensions
 
             services.AddOptions<ServiceSettingModel>("NotificationService")
                 .BindConfiguration("ServiceSettings:NotificationService");
+
+            services.AddOptions<ServiceSettingModel>("DummyJsonService")
+                .BindConfiguration("ServiceSettings:DummyJsonService");
         }
     }
 }
